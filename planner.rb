@@ -5,11 +5,12 @@ require 'algorithms'
 require 'heuristic'
 
 def debug(str)
-    #puts str
+  #puts str
 end
 
 class Problem
   attr_accessor :predicates, :objects, :operators, :initial_state, :goal
+
   def initialize(values)
     @predicates = values[:predicates]
     @objects = values[:objects]
@@ -32,11 +33,11 @@ class Predicate
     @name = tokens.shift
     @parameters = tokens
   end
-
 end
 
 class Fact
   attr_reader :predicate, :values
+
   @@facts = {}
 
   def initialize(predicate, values)
@@ -60,11 +61,10 @@ class Fact
   def to_s
     key
   end
-  
+
   def Fact.instances
     @@facts.values
   end
-
 end
 
 class State
@@ -82,7 +82,7 @@ class State
     @previous = nil
     @action = nil
   end
-  
+
   def clone
     s = State.new([], nil)
     s.facts = @facts.dup
@@ -134,12 +134,12 @@ class State
         res << action if is_applicable?(action)
       end
     end
-    
+
     debug "Applicable actions in state #{self}: "
     debug res
     res
   end
-  
+
   def is_applicable?(action)
     action.operator.precondition.each do |prec|
       f = get_matching_fact(prec, action)
@@ -196,12 +196,11 @@ class State
     elsif !self.class.equal?(object.class)
       return false
     end
-    
+
     object.each_fact{|f| return false if !self.include_fact?(f)}
     self.each_fact{|f| return false if !object.include_fact?(f)}
     true
   end
-
 end
 
 class Operator
@@ -213,7 +212,6 @@ class Operator
     @precondition = value['precondition']
     @effect = value['effect']
   end
-
 end
 
 class Action
@@ -230,9 +228,7 @@ class Action
 end
 
 class Planner
-  
   def initialize(domain_file, problem_file)
-
     domain = YAML.load(File.new(domain_file,'r').read)
     predicates = {}
     domain['predicates'].each do |p|
@@ -252,10 +248,10 @@ class Planner
 
     @current_state = initial_state
     @problem = Problem.new(:predicates => predicates,
-                :objects => objects,
-                :initial_state => initial_state,
-                :goal => goal,
-                :operators => operators)
+                           :objects => objects,
+                           :initial_state => initial_state,
+                           :goal => goal,
+                           :operators => operators)
 
     @heuristic = Heuristic.new(@problem)
   end
@@ -275,11 +271,8 @@ class Planner
     puts "\nSOLUTION: (#{@current_state.solution.size} actions)"
     puts @current_state.solution.join("\n")
   end
-  
 
-  
   def next_state(current_state)
-
     queue = Containers::PriorityQueue.new{ |x, y| (x <=> y) == -1 }
     queue.push(current_state, current_state.heuristic)
     tabu_states = []
@@ -300,14 +293,14 @@ class Planner
 
     nil
   end
-  
+
   def is_goal_satisfied?(state)
     @problem.goal.each_fact do |goal|
       return false if !state.include_fact?(goal)
     end
     true
   end
-  
+
   def Planner.comb(array, n)
     return array.map{|e| [e]} if n == 1
     res = []
@@ -316,10 +309,8 @@ class Planner
         res << [e] + f
       end
     end
-   res
+    res
   end
-
-
 end
 
 if __FILE__ == $0
