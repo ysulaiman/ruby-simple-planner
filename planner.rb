@@ -2,7 +2,7 @@ require 'rubygems'
 require 'yaml'
 require 'algorithms'
 
-require 'heuristic'
+require_relative 'heuristic'
 
 def debug(str)
   #puts str
