@@ -1,0 +1,17 @@
+predicates:
+  - logged-in ?u
+  - logged-out ?u
+
+actions:
+  login:
+    parameters: ?u
+    precondition:
+      - logged-out ?u
+    effect:
+      - logged-in ?u
+  logout:
+    parameters: ?u
+    precondition:
+      - logged-in ?u
+    effect:
+      - logged-out ?u

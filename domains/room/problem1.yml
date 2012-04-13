@@ -1,0 +1,9 @@
+objects:
+  - john
+  - gate
+init:
+  - outside john
+  - closed gate
+goal:
+  - inside john
+  - closed gate

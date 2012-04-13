@@ -1,0 +1,34 @@
+predicates:
+  - inside ?agent
+  - outside ?agent
+  - open ?door
+  - closed ?door
+
+actions:
+  opendoor:
+    parameters: ?door
+    precondition:
+      - closed ?door
+    effect:
+      - open ?door
+  closedoor:
+    parameters: ?door
+    precondition:
+      - open ?door
+    effect:
+      - closed ?door
+
+  goinside:
+    parameters: ?agent ?door
+    precondition:
+      - open ?door
+      - outside ?agent
+    effect:
+      - inside ?agent
+  gooutside:
+    parameters: ?agent ?door
+    precondition:
+      - open ?door
+      - inside ?agent
+    effect:
+      - outside ?agent

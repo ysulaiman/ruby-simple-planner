@@ -1,0 +1,6 @@
+objects:
+  - U
+init:
+  - logged-in U
+goal:
+  - logged-out U
